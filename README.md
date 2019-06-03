@@ -41,7 +41,8 @@ logger.info('Sawmill logger has been created')
 All the logging handlers & formatters are handled in the background removing the need to have the setup code
 at the top of your *.py files.
 
-### How To
+
+# How To
 
 Change log format
 ----
@@ -61,6 +62,9 @@ Define a new colour
 Colour Enum values are [256 colour codes].
 Go into sawmill/utils.py and add to the existing 'Colour' Enum.
 
+Change the log file location
+----
+Go into sawmill/config.py and update the dir / filename. The next time the app runs the new filename/folder will be used.
 
 ### Terminal commands
 
