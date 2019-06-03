@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "sawmill"
+version = "0.0.1"
+description = "MirrorWeb's custom logger."
+authors = ["Lee Booth <lee.booth@mirrorweb.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.6.5"
+python-decouple = "^3.1"
+
+[tool.poetry.dev-dependencies]
+coverage = "^4.5"
+sphinx = "^2.1"
+flake8 = "^3.7"
+isort = "^4.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
