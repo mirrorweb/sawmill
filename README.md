@@ -42,30 +42,44 @@ All the logging handlers & formatters are handled in the background removing the
 at the top of your *.py files.
 
 ### How To
-##### - Change log format
+
+Change log format
+----
 Log format can be different per output type AND log level.
 Go into the sawmill/config.py file and select a 'MsgFormat' Enum option.
-##### - Define a new log format
+
+Define a new log format
+----
+
 Go into sawmill/utils.py and add to the existing 'MsgFormat' Enum.
-##### - Change log colours
+----
+
 Go into the sawmill/config.py file and select an Enum option for primary, secondary & tertiary colours.
-##### - Define a new log colour
+----
 Colour Enum values are [256 colour codes].
 Go into sawmill/utils.py and add to the existing 'Colour' Enum.
 
+
 ### Terminal commands
-`$ make env`
-Builds the environment using poetry
-`$ make run`
-Doesn't do anything! Just here for consistency with our other projects
-`$ make test`
-Runs the test suite
-`$ make lint`
-Runs linting on the code
-`$ make docs`
-Uses Sphinx to auto-create documentation from doc-strings
-`$ make requirements`
-Creates/updates the requirements.txt
+
+- `make env`
+    builds the project depedencies to a virtural environment using Poetry
+
+- `make run`
+    Doesn't do anything! Just here for consistency with our other projects
+
+- `$ make test`
+    Runs the test suite
+
+- `make lint`
+    formats code
+
+- `make docs`
+    uses Sphinx to auto-create documentation from doc-strings
+
+- `make requirements`
+    generates a up-to-date requirements.txt file
+
 
 [256 colour codes]: https://jonasjacek.github.io/colors/
 
