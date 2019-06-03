@@ -11,5 +11,6 @@ class SawmillTests(unittest.TestCase):
         self.logger = Sawmill.new_logger(__name__)
 
     def test_one(self):
+        self.logger.debug("test output")
         self.assertTrue(isinstance(self.logger, logging.Logger))
 

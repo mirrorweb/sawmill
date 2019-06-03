@@ -37,6 +37,7 @@ class Sawmill(logging.Logger):
                 filename=Conf.FILE['OUTPUT_DIR'],
                 maxBytes=Conf.FILE['MAX_BYTES'],
                 backupCount=Conf.FILE['BACKUPS'],
+                delay=True,
             )
             log_file.setFormatter(logging.Formatter(fmt=Conf.FILE['MSG_FMT'].value, datefmt=Conf.FILE['DATE_FMT']))
             log_file.setLevel(self.file_level)
@@ -100,37 +101,37 @@ class ColoredFormatter(logging.Formatter):
         with self.non_destructive_style_change(record) as recordcopy:
             log, msg_fmt, primary_col, secondary_col, tertiary_col = recordcopy
             if self.use_colour:
-                log.name = apply_styling(record.name, colour=secondary_col)
-                log.levelname = apply_styling(record.levelname, colour=tertiary_col, bold=True)
-                log.pathname = apply_styling(record.pathname, colour=Colour.DARK_BLUE.value, underline=True, italic=True)
-                log.lineno = apply_styling(str(record.lineno), colour=secondary_col, bold=True)
+                log.name = self.apply_styling(record.name, colour=secondary_col)
+                log.levelname = self.apply_styling(record.levelname, colour=tertiary_col, bold=True)
+                log.pathname = self.apply_styling(record.pathname, colour=Colour.DARK_BLUE.value, underline=True, italic=True)
+                log.lineno = self.apply_styling(str(record.lineno), colour=secondary_col, bold=True)
 
                 # change the way the function name is displayed
                 if record.funcName == '<module>':
                     log.funcName = ''
                 else:
                     if msg_fmt in ['SIMPLE', 'LINE']:
-                        log.funcName = apply_styling(record.funcName, colour=tertiary_col)
+                        log.funcName = self.apply_styling(record.funcName, colour=tertiary_col)
                     else:
-                        log.funcName = apply_styling(f'def {record.funcName}():', colour=tertiary_col)
+                        log.funcName = self.apply_styling(f'def {record.funcName}():', colour=tertiary_col)
 
                 # boxed styling - split message lines, add tabs and '|' before each 
                 if msg_fmt in ['BOXED_L', 'BOXED_M', 'BOXED_S']:
                     lines = record.msg.split('\n')
                     for i, val in enumerate(lines):
-                        lines[i] = '\t| ' + apply_styling(val, colour=primary_col)
+                        lines[i] = '\t| ' + self.apply_styling(val, colour=primary_col)
                     log.msg = '\n'.join(lines)
                 else:
-                    log.msg = apply_styling(record.msg, colour=primary_col)
+                    log.msg = self.apply_styling(record.msg, colour=primary_col)
 
             return logging.Formatter.format(self, log)
 
-    def apply_styling(log_str, colour=None, back_colour=None, bold=False, dim=False, italic=False, underline=False, invert=False):
+    def apply_styling(self, log_str, colour=None, back_colour=None, bold=False, dim=False, italic=False, underline=False, invert=False):
         """inserts values into a string allowing us to apply visial styles to it in the bash terminal"""
-        log_str = Codes.COLOUR_256.value % colour + log_str if colour else log_str
-        log_str = Codes.COLOUR_B256.value % back_colour + log_str if back_colour else log_str
+        log_str = self.Codes.COLOUR_256.value % colour + log_str if colour else log_str
+        log_str = self.Codes.COLOUR_B256.value % back_colour + log_str if back_colour else log_str
 
         for style, value in {'BOLD': bold, 'DIM': dim, 'ITALIC': italic, 'UNDERLINE': underline, 'INVERT': invert}.items():
-            log_str = Codes[style].value + log_str if value else log_str
+            log_str = self.Codes[style].value + log_str if value else log_str
 
-        return log_str + Codes.RESET.value
+        return log_str + self.Codes.RESET.value
