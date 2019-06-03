@@ -50,11 +50,13 @@ Go into the sawmill/config.py file and select a 'MsgFormat' Enum option.
 
 Define a new log format
 ----
-
 Go into sawmill/utils.py and add to the existing 'MsgFormat' Enum.
-----
 
+Change log colours
+----
 Go into the sawmill/config.py file and select an Enum option for primary, secondary & tertiary colours.
+
+Define a new colour
 ----
 Colour Enum values are [256 colour codes].
 Go into sawmill/utils.py and add to the existing 'Colour' Enum.
