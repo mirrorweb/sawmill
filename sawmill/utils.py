@@ -1,4 +1,7 @@
+from contextlib import contextmanager
 from enum import Enum
+from timeit import default_timer as timer
+import sys
 
 
 class MsgFormat(Enum):
@@ -89,3 +92,78 @@ def show_logger_tree():
 
     output.append('-------------------------------')
     print('\n'.join(output))
+
+
+class ProgressBar:
+    def __init__(self, total, iteration=0, prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
+        """ """
+        self.total = total
+        self.iteration = iteration
+        self.prefix = prefix
+        self.suffix = suffix
+        self.decimals = decimals
+        self.length = length
+
+        self.prefix_colour = Colour.ORANGE.value
+        self.number_colour = Colour.PURPLE.value
+        self.suffix_colour = Colour.GREEN.value
+        self.bar_colour = Colour.GREEN.value
+        self.done_fill='█'
+        self.active_fill='█'
+        self.bar_ends = '|'
+        self.bar_back = ['-' for _ in range(self.length)]
+
+        if draw_mode == 'pacman':
+            self.done_fill=' '
+            self.active_fill = self.colour_string('ᗣ', Colour.RED.value)
+            self.active_fill += self.colour_string(' ᗣ', Colour.LIGHT_BLUE.value)
+            self.active_fill += self.colour_string(' ᗣ', Colour.ORANGE.value)
+            self.active_fill += self.colour_string(' ᗣ', Colour.PINK.value)
+            self.active_fill += self.colour_string(' ᗧ', Colour.YELLOW.value)
+            self.bar_ends = self.colour_string('||', Colour.BLUE.value)
+            for i, v in enumerate(self.bar_back):
+                self.bar_back[i] = '•' if i in [x*6 for x in range(1,20)] else '·'
+            self.bar_colour = Colour.YELLOW.value
+
+        self.draw()
+
+    @classmethod
+    @contextmanager
+    def load(cls, total, iteration=0, msg='', prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
+        if msg:
+            sys.stdout.write(cls.colour_string(cls, f'{msg} \n', Colour.WHITE.value))
+            sys.stdout.flush()
+
+        start = timer()
+        yield cls(total, iteration, prefix, suffix, decimals, length, draw_mode)
+        end = timer()
+
+        sys.stdout.write(cls.colour_string(cls, f'{total} items processed in %.2fs\n' % (end-start), Colour.PINK.value))
+
+    def draw(self):
+        full_value = 100 * (self.iteration / float(self.total))
+        display_value = f'%.{str(self.decimals)}f' % full_value
+
+        filled_length = int(self.length * self.iteration // self.total)
+        filled_bar = self.done_fill * filled_length
+        empty_bar = ''.join(self.bar_back[filled_length: self.length])
+        bar = filled_bar + self.active_fill + self.colour_string(empty_bar, self.bar_colour)
+
+        out_string = self.colour_string(f'\r{self.prefix} ', self.prefix_colour)
+        out_string += self.bar_ends
+        out_string += self.colour_string(f'{bar}', self.bar_colour)
+        out_string += self.bar_ends
+        out_string += self.colour_string(f' {display_value}% ', self.number_colour)
+        out_string += self.colour_string(f'{self.suffix}', self.suffix_colour)
+        sys.stdout.write(out_string)
+        sys.stdout.flush()
+
+        if self.iteration == self.total:
+            sys.stdout.write('\n')
+
+    def update(self):
+        self.iteration += 1
+        return self.draw()
+
+    def colour_string(self, input_str, colour):
+        return '\033[38;5;%dm' % colour + input_str + '\033[0m'

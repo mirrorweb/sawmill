@@ -169,3 +169,5 @@ fabric.properties
 \.idea/
 
 coverage_html_report/
+
+sawmill/log_files/timber\.log
