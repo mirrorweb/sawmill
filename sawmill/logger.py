@@ -14,7 +14,7 @@ import logging
 import sys
 
 from .config import Conf
-from .utils import Colour
+from .utils import Colour, ProgressBar
 
 
 class Sawmill(logging.Logger):
@@ -26,6 +26,7 @@ class Sawmill(logging.Logger):
         self.console_level = console_lvl if console_lvl else Conf.DEFAULT_CONSOLE_LEVEL
         self.file_level = file_lvl if file_lvl else Conf.DEFAULT_FILE_LEVEL
         self.sysout_level = sysout_lvl if sysout_lvl else Conf.DEFAULT_SYSOUT_LEVEL
+        self.progress_bar = ProgressBar(draw_mode=Conf.PB_DRAW_MODE)
 
         if self.developer_mode:
             console = logging.StreamHandler()
