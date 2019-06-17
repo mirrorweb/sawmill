@@ -172,11 +172,13 @@ class ProgressBar:
     @contextmanager
     def watch(self, iterable, title=''):
         """A context manager that yields an already existing ProgressBar as an interable wrapper"""
+        print()
         if title:
             print(self.colour_string(title, Colour.WHITE.value))
 
         yield self(iterable)
         self.reset()
+        print()
 
 
     def draw(self):
