@@ -116,6 +116,10 @@ class ProgressBar:
         self.end = None
         self.__iterable = None
 
+        self.draw_interval = 0.25
+        self.draw_time = 0
+        self.draw_count = 0
+
         self.prefix_colour = Colour.ORANGE.value
         self.number_colour = Colour.PURPLE.value
         self.suffix_colour = Colour.GREEN.value
@@ -182,6 +186,9 @@ class ProgressBar:
 
 
     def draw(self):
+        self.draw_count += 1
+        self.draw_time = timer()
+
         full_value = 100 * (self.iteration / float(self.total))
         display_value = f'%.{str(self.decimals)}f' % full_value
 
@@ -207,9 +214,10 @@ class ProgressBar:
 
     def update(self):
         self.iteration += 1
-        self.draw()
+        if (timer() - self.draw_time) > self.draw_interval or self.iteration == self.total:
+            self.draw()
 
-    
+
     def reset(self):
         self.iteration = 0
         self.total = None
