@@ -95,17 +95,25 @@ def show_logger_tree():
 
 
 class ProgressBar:
-    def __init__(self, total=None, iteration=None, prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
+    def __init__(
+        self,
+        total: int = None,
+        iteration: int = None,
+        prefix: str = 'Progress',
+        suffix: str = 'Complete',
+        decimals: int = 2,
+        length: int = 80,
+        draw_mode: str = ''):
         """ """
-        self.title = None
-        self.start = None
-        self.end = None
         self.total = total
         self.iteration = iteration
         self.prefix = prefix
         self.suffix = suffix
         self.decimals = decimals
         self.length = length
+
+        self.start = None
+        self.end = None
         self.__iterable = None
 
         self.prefix_colour = Colour.ORANGE.value
@@ -130,14 +138,13 @@ class ProgressBar:
             self.bar_colour = Colour.YELLOW.value
 
 
-    def __call__(self, iterable, title):
+    def __call__(self, iterable, title=''):
         """Use a ProgressBar to iterate through an iterable."""
-        self.__iterable = iter(iterable)
-        self.title = title
-        print(self.colour_string('\n' + self.title, Colour.WHITE.value))
+        if title:
+            print(self.colour_string(title, Colour.WHITE.value))
         self.reset()
         self.total = len(iterable)
-        self.draw()
+        self.__iterable = iter(iterable)
         return self
 
 
@@ -148,9 +155,9 @@ class ProgressBar:
     def __next__(self):
         try:
             value = next(self.__iterable)
-            self.update()
             if not self.start:
                 self.start = timer()
+            self.update()
             return value
 
         except StopIteration:
@@ -158,24 +165,18 @@ class ProgressBar:
                 self.end = timer()
             sys.stdout.write('\n')
             sys.stdout.flush()
-            print(self.colour_string(f'{self.total} items processed in %.2fs\n' % (self.end-self.start), Colour.PINK.value))
+            print(self.colour_string(f'{self.total} items processed in %.2fs' % (self.end-self.start), Colour.PINK.value))
             raise
 
 
-    @classmethod
     @contextmanager
-    def load(cls, total, iteration=0, msg='', prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
-        if msg:
-            sys.stdout.write(cls.colour_string(cls, f'{msg} \n', Colour.WHITE.value))
-            sys.stdout.flush()
+    def watch(self, iterable, title=''):
+        """A context manager that yields an already existing ProgressBar as an interable wrapper"""
+        if title:
+            print(self.colour_string(title, Colour.WHITE.value))
 
-        start = timer()
-        yield cls(total, iteration, prefix, suffix, decimals, length, draw_mode)
-        end = timer()
-
-        sys.stdout.write('\n')
-        sys.stdout.flush()
-        print(cls.colour_string(cls, f'{total} items processed in %.2fs\n' % (end-start), Colour.PINK.value))
+        yield self(iterable)
+        self.reset()
 
 
     def draw(self):
@@ -206,9 +207,25 @@ class ProgressBar:
         self.iteration += 1
         self.draw()
 
-
+    
     def reset(self):
         self.iteration = 0
         self.total = None
         self.start = None
         self.end = None
+
+
+    @classmethod
+    @contextmanager
+    def custom(cls, total, iteration=0, title='', prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
+        """A context manager that yields a new ProgressBar object - gives user control of contructor args"""
+        if title:
+            print(cls.colour_string(cls, title, Colour.WHITE.value))
+
+        start = timer()
+        yield cls(total, iteration, prefix, suffix, decimals, length, draw_mode)
+        end = timer()
+
+        sys.stdout.write('\n')
+        sys.stdout.flush()
+        print(cls.colour_string(cls, f'{total} items processed in %.2fs' % (end-start), Colour.PINK.value))
