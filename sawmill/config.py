@@ -17,6 +17,8 @@ class Conf:
     #   True: console & file output active.
     #   False: sysout is active.
     DEVELOPER_MODE = config('SAWMILL_DEVELOPER_LOGS', default=False, cast=bool)
+    PB_DRAW_MODE = config('SAWMILL_PB_MODE', default='', cast=str)
+
 
     # ---------------------------------------------------
     # Default logging level of each output type

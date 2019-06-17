@@ -95,14 +95,18 @@ def show_logger_tree():
 
 
 class ProgressBar:
-    def __init__(self, total, iteration=0, prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
+    def __init__(self, total=None, iteration=None, prefix='Progress', suffix='Complete', decimals=2, length=80, draw_mode=''):
         """ """
+        self.title = None
+        self.start = None
+        self.end = None
         self.total = total
         self.iteration = iteration
         self.prefix = prefix
         self.suffix = suffix
         self.decimals = decimals
         self.length = length
+        self.__iterable = None
 
         self.prefix_colour = Colour.ORANGE.value
         self.number_colour = Colour.PURPLE.value
@@ -125,7 +129,38 @@ class ProgressBar:
                 self.bar_back[i] = '•' if i in [x*6 for x in range(1,20)] else '·'
             self.bar_colour = Colour.YELLOW.value
 
+
+    def __call__(self, iterable, title):
+        """Use a ProgressBar to iterate through an iterable."""
+        self.__iterable = iter(iterable)
+        self.title = title
+        print(self.colour_string('\n' + self.title, Colour.WHITE.value))
+        self.reset()
+        self.total = len(iterable)
         self.draw()
+        return self
+
+
+    def __iter__(self):
+        return self
+
+
+    def __next__(self):
+        try:
+            value = next(self.__iterable)
+            self.update()
+            if not self.start:
+                self.start = timer()
+            return value
+
+        except StopIteration:
+            if not self.end:
+                self.end = timer()
+            sys.stdout.write('\n')
+            sys.stdout.flush()
+            print(self.colour_string(f'{self.total} items processed in %.2fs\n' % (self.end-self.start), Colour.PINK.value))
+            raise
+
 
     @classmethod
     @contextmanager
@@ -138,7 +173,10 @@ class ProgressBar:
         yield cls(total, iteration, prefix, suffix, decimals, length, draw_mode)
         end = timer()
 
-        sys.stdout.write(cls.colour_string(cls, f'{total} items processed in %.2fs\n' % (end-start), Colour.PINK.value))
+        sys.stdout.write('\n')
+        sys.stdout.flush()
+        print(cls.colour_string(cls, f'{total} items processed in %.2fs\n' % (end-start), Colour.PINK.value))
+
 
     def draw(self):
         full_value = 100 * (self.iteration / float(self.total))
@@ -155,15 +193,22 @@ class ProgressBar:
         out_string += self.bar_ends
         out_string += self.colour_string(f' {display_value}% ', self.number_colour)
         out_string += self.colour_string(f'{self.suffix}', self.suffix_colour)
+
         sys.stdout.write(out_string)
         sys.stdout.flush()
 
-        if self.iteration == self.total:
-            sys.stdout.write('\n')
-
-    def update(self):
-        self.iteration += 1
-        return self.draw()
 
     def colour_string(self, input_str, colour):
         return '\033[38;5;%dm' % colour + input_str + '\033[0m'
+
+
+    def update(self):
+        self.iteration += 1
+        self.draw()
+
+
+    def reset(self):
+        self.iteration = 0
+        self.total = None
+        self.start = None
+        self.end = None
