@@ -14,7 +14,7 @@ dev_dependencies = [
 
 setup(
     name='sawmill',
-    version='0.0.1',
+    version='0.0.2',
     description='A custom Python logger with colour formatter for working with MirrorWeb projects',
     packages=[],
     url='https://github.com/mirrorweb/sawmill',
@@ -22,7 +22,5 @@ setup(
     author_email='lee.booth@mirrorweb.com',
     install_requires=dependencies,
     extra_require={'dev': dev_dependencies},
-    dependency_links=[
-        'git+ssh://git@github.com/mirrorweb/dora.git@refactor/improved-tooling#egg=dora-3.0.0',
-    ],
+    dependency_links=[],
 )
