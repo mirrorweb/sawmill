@@ -14,9 +14,9 @@ dev_dependencies = [
 
 setup(
     name='sawmill',
-    version='0.0.2',
+    version='0.0.3',
     description='A custom Python logger with colour formatter for working with MirrorWeb projects',
-    packages=[],
+    packages=['sawmill'],
     url='https://github.com/mirrorweb/sawmill',
     author='Lee Booth, MirrorWeb Ltd.',
     author_email='lee.booth@mirrorweb.com',
