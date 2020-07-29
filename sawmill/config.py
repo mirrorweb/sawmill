@@ -34,9 +34,8 @@ class Conf:
     file_name = 'timber.log'
     
     
-    if DEVELOPER_MODE:
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+    if DEVELOPER_MODE and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     FILE = {
         'MSG_FMT': MsgFormat.SYSOUT,
