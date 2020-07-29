@@ -32,9 +32,11 @@ class Conf:
     # ---------------------------------------------------
     output_dir = 'sawmill/log_files/'
     file_name = 'timber.log'
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    
+    
+    if DEVELOPER_MODE:
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
     FILE = {
         'MSG_FMT': MsgFormat.SYSOUT,
