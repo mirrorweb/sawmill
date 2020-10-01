@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 dependencies = [
-    'python_decouple==3.1'
+    'python_decouple==3.3'
 ]
 
 dev_dependencies = [

@@ -25,4 +25,8 @@ docs:
 	@cd docs && make html
 
 requirements:
-	@poetry show --no-dev | tr -s " " | sed 's/ /==/' | sed 's/ .*//' > requirements.txt
+	@poetry update
+	@poetry export \
+	--format requirements.txt \
+	--output requirements.txt \
+	--without-hashes
