@@ -25,7 +25,6 @@ docs:
 	@cd docs && make html
 
 requirements:
-	@poetry update
 	@poetry export \
 	--format requirements.txt \
 	--output requirements.txt \
