@@ -32,8 +32,9 @@ class Conf:
     # ---------------------------------------------------
     output_dir = 'sawmill/log_files/'
     file_name = 'timber.log'
-
-    if not os.path.exists(output_dir):
+    
+    
+    if DEVELOPER_MODE and not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     FILE = {
