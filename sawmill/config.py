@@ -24,7 +24,7 @@ class Conf:
     # Default logging level of each output type
     # ---------------------------------------------------
     DEFAULT_FILE_LEVEL = logging.DEBUG
-    DEFAULT_SYSOUT_LEVEL = logging.INFO
+    DEFAULT_SYSOUT_LEVEL = getattr(logging, config('LOGGING_LEVEL', default='INFO').upper())
     DEFAULT_CONSOLE_LEVEL = logging.DEBUG
 
     # ---------------------------------------------------
