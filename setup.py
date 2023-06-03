@@ -6,7 +6,7 @@ dependencies = [
 ]
 
 dev_dependencies = [
-    'coverage==4.5',
+    'coverage==4.5.4',
     'sphinx==1.8',
     'flake8==3.6',
     'isort==4.3',
