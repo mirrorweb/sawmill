@@ -7,7 +7,7 @@ dependencies = [
 
 dev_dependencies = [
     'coverage==4.5',
-    'sphinx==1.8',
+    'sphinx==1.8.6',
     'flake8==3.6',
     'isort==4.3',
 ]
