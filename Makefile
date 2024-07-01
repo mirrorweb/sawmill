@@ -24,8 +24,10 @@ docs:
 	@poetry run sphinx-apidoc -o docs/source ./ ./tests/*.py
 	@cd docs && make html
 
+## Generate a fresh requirements.txt file from poetry environment
 requirements:
 	@poetry export \
 	--format requirements.txt \
 	--output requirements.txt \
 	--without-hashes
+	@poetry show --tree > poetry-show-tree
