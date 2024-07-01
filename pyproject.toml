@@ -5,7 +5,8 @@ description = "MirrorWeb's custom logger."
 authors = ["Lee Booth <lee.booth@mirrorweb.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6.5"
+python = "^3.11"
+
 python-decouple = "^3.1"
 
 [tool.poetry.dev-dependencies]
