@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sawmill"
-version = "0.0.3"
+version = "0.3.0"
 description = "MirrorWeb's custom logger."
 authors = ["Lee Booth <lee.booth@mirrorweb.com>"]
 
